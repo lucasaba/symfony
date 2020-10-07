@@ -1,0 +1,10 @@
+version: '3'
+services:
+  ldap_server:
+    build:
+      context: ./docker
+    environment:
+      LDAP_ADMIN_PASSWORD: symfony
+      LDAP_BASE_DN: dc=symfony,dc=com
+    ports:
+      - 3389:389
