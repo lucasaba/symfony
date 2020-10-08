@@ -15,45 +15,46 @@ jobs:
                 php: ['7.1', '7.4']
 
         services:
-            redis:
-                image: redis:6.0.0
-                ports:
-                    - 6379:6379
-            redis-cluster:
-                image: grokzen/redis-cluster:5.0.4
-                ports:
-                    - 7000:7000
-                    - 7001:7001
-                    - 7002:7002
-                    - 7003:7003
-                    - 7004:7004
-                    - 7005:7005
-                    - 7006:7006
-                    - 7007:7007
-                env:
-                    STANDALONE: true
-            memcached:
-                image: memcached:1.6.5
-                ports:
-                    - 11211:11211
-            rabbitmq:
-                image: rabbitmq:3.8.3
-                ports:
-                    - 5672:5672
+#            redis:
+#                image: redis:6.0.0
+#                ports:
+#                    - 6379:6379
+#            redis-cluster:
+#                image: grokzen/redis-cluster:5.0.4
+#                ports:
+#                    - 7000:7000
+#                    - 7001:7001
+#                    - 7002:7002
+#                    - 7003:7003
+#                    - 7004:7004
+#                    - 7005:7005
+#                    - 7006:7006
+#                    - 7007:7007
+#                env:
+#                    STANDALONE: true
+#            memcached:
+#                image: memcached:1.6.5
+#                ports:
+#                    - 11211:11211
+#            rabbitmq:
+#                image: rabbitmq:3.8.3
+#                ports:
+#                    - 5672:5672
             openldap:
                 image: openfrontier/openldap-server:2.4.44
                 env:
                     SLAPD_PASSWORD: symfony
                     SLAPD_DOMAIN: dc=symfony,dc=com
                     SLAPD_ADDITIONAL_SCHEMAS: inetorgperson, nis, cosine
-                volumes:
-                    - /home/runner/work/.github/openldap/data:/etc/ldap.dist/prepopulate
                 ports:
                     - 3389:389
 
         steps:
             -   name: Checkout
                 uses: actions/checkout@v2
+
+            -   name: Populate LDAP
+                run: ldapadd -f $GITHUB_WORKSPACE/.github/openldap/base.ldif && ldapadd -f $GITHUB_WORKSPACE/.github/openldap/fixtures.ldif
 
             -   name: Setup PHP
                 uses: shivammathur/setup-php@v2
@@ -92,7 +93,7 @@ jobs:
                     echo "::endgroup::"
 
             -   name: Run tests
-                run: ./phpunit --group integration
+                run: ./phpunit src/Symfony/Component/Ldap
                 env:
                     REDIS_HOST: localhost
                     REDIS_CLUSTER_HOSTS: 'localhost:7000 localhost:7001 localhost:7002 localhost:7003 localhost:7004 localhost:7005'
