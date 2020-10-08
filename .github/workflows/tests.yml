@@ -41,11 +41,13 @@ jobs:
                 ports:
                     - 5672:5672
             openldap:
-                build:
-                    context: ../openldap/docker
+                image: openfrontier/openldap-server:2.4.44
                 environment:
-                    LDAP_ADMIN_PASSWORD: symfony
-                    LDAP_BASE_DN: dc=symfony,dc=com
+                    SLAPD_PASSWORD: symfony
+                    SLAPD_DOMAIN: dc=symfony,dc=com
+                    SLAPD_ADDITIONAL_SCHEMAS: inetorgperson, nis, cosine
+                volumes:
+                    - ../openldap/data:/etc/ldap.dist/prepopulate
                 ports:
                     - 3389:389
 
@@ -57,7 +59,7 @@ jobs:
                 uses: shivammathur/setup-php@v2
                 with:
                     coverage: "none"
-                    extensions: "memcached,redis,xsl"
+                    extensions: "memcached,redis,xsl,ldap"
                     ini-values: "memory_limit=-1"
                     php-version: "${{ matrix.php }}"
                     tools: flex
