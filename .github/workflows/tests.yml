@@ -47,7 +47,7 @@ jobs:
                     SLAPD_DOMAIN: dc=symfony,dc=com
                     SLAPD_ADDITIONAL_SCHEMAS: inetorgperson, nis, cosine
                 volumes:
-                    - $GITHUB_WORKSPACE/.github/openldap/data:/etc/ldap.dist/prepopulate
+                    - /home/runner/work/.github/openldap/data:/etc/ldap.dist/prepopulate
                 ports:
                     - 3389:389
 
