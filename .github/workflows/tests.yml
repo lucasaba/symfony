@@ -42,7 +42,7 @@ jobs:
                     - 5672:5672
             openldap:
                 image: openfrontier/openldap-server:2.4.44
-                environment:
+                env:
                     SLAPD_PASSWORD: symfony
                     SLAPD_DOMAIN: dc=symfony,dc=com
                     SLAPD_ADDITIONAL_SCHEMAS: inetorgperson, nis, cosine
