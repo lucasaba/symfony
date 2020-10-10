@@ -15,39 +15,31 @@ jobs:
                 php: ['7.1', '7.4']
 
         services:
-#            redis:
-#                image: redis:6.0.0
-#                ports:
-#                    - 6379:6379
-#            redis-cluster:
-#                image: grokzen/redis-cluster:5.0.4
-#                ports:
-#                    - 7000:7000
-#                    - 7001:7001
-#                    - 7002:7002
-#                    - 7003:7003
-#                    - 7004:7004
-#                    - 7005:7005
-#                    - 7006:7006
-#                    - 7007:7007
-#                env:
-#                    STANDALONE: true
-#            memcached:
-#                image: memcached:1.6.5
-#                ports:
-#                    - 11211:11211
-#            rabbitmq:
-#                image: rabbitmq:3.8.3
-#                ports:
-#                    - 5672:5672
-            openldap:
-                image: openfrontier/openldap-server:2.4.44
-                env:
-                    SLAPD_PASSWORD: symfony
-                    SLAPD_DOMAIN: dc=symfony,dc=com
-                    SLAPD_ADDITIONAL_SCHEMAS: inetorgperson, nis, cosine
+            redis:
+                image: redis:6.0.0
                 ports:
-                    - 3389:389
+                    - 6379:6379
+            redis-cluster:
+                image: grokzen/redis-cluster:5.0.4
+                ports:
+                    - 7000:7000
+                    - 7001:7001
+                    - 7002:7002
+                    - 7003:7003
+                    - 7004:7004
+                    - 7005:7005
+                    - 7006:7006
+                    - 7007:7007
+                env:
+                    STANDALONE: true
+            memcached:
+                image: memcached:1.6.5
+                ports:
+                    - 11211:11211
+            rabbitmq:
+                image: rabbitmq:3.8.3
+                ports:
+                    - 5672:5672
 
         steps:
             -   name: Checkout
@@ -93,6 +85,7 @@ jobs:
                     echo "::endgroup::"
 
             -   name: Run tests
+                uses: lucasaba/symfony-openldap-action@v1
                 run: ./phpunit src/Symfony/Component/Ldap
                 env:
                     REDIS_HOST: localhost
