@@ -45,8 +45,8 @@ jobs:
             -   name: Checkout
                 uses: actions/checkout@v2
 
-            -   name: Populate LDAP
-                run: ldapadd -f $GITHUB_WORKSPACE/.github/openldap/base.ldif && ldapadd -f $GITHUB_WORKSPACE/.github/openldap/fixtures.ldif
+            -   name: Setup OpenLDAP
+                uses: lucasaba/symfony-openldap-action@v1
 
             -   name: Setup PHP
                 uses: shivammathur/setup-php@v2
@@ -85,7 +85,6 @@ jobs:
                     echo "::endgroup::"
 
             -   name: Run tests
-                uses: lucasaba/symfony-openldap-action@v1
                 run: ./phpunit src/Symfony/Component/Ldap
                 env:
                     REDIS_HOST: localhost
