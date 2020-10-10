@@ -40,13 +40,17 @@ jobs:
                 image: rabbitmq:3.8.3
                 ports:
                     - 5672:5672
+            symfony-openldap:
+                image: lucasaba/symfony-openldap-server:latest
+                env:
+                    LDAP_ADMIN_PASSWORD: symfony
+                    LDAP_BASE_DN: dc=symfony,dc=com
+                ports:
+                    - 3389:389
 
         steps:
             -   name: Checkout
                 uses: actions/checkout@v2
-
-            -   name: Setup OpenLDAP
-                uses: lucasaba/symfony-openldap-action@v0.1
 
             -   name: Setup PHP
                 uses: shivammathur/setup-php@v2
