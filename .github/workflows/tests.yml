@@ -46,7 +46,7 @@ jobs:
                 uses: actions/checkout@v2
 
             -   name: Setup OpenLDAP
-                uses: lucasaba/symfony-openldap-action@v1
+                uses: lucasaba/symfony-openldap-action@v0.1
 
             -   name: Setup PHP
                 uses: shivammathur/setup-php@v2
